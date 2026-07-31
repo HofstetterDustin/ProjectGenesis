@@ -3,7 +3,7 @@ Created memory system.
 
 Questions:
 - Why JSON?
-	We use JSON first because it is simple, visible, and teaches us how memory works. We will likely move to a database later because an intelligent system will eventually outgrow a JSON file.
+	We use JSON first because it is simple, visible, and teaches us how memory works. I will likely move to a database later because an intelligent system will eventually outgrow a JSON file.
 - How does Python load files?
 	Python
 	  |
@@ -28,49 +28,39 @@ Project Genesis Status — After adding new or another fact.
 
 Current abilities:
 
-✅ Starts with an empty memory
-✅ Loads previous knowledge from storage
-✅ Learns new facts
-✅ Saves learned facts permanently
-✅ Stores relationships between concepts
+Starts with an empty memory
+Loads previous knowledge from storage
+Learns new facts
+Saves learned facts permanently
+Stores relationships between concepts
 
 Current limitation:
 
-❌ It does not know if it has already learned something
+It does not know if it has already learned something
 
 Project Genesis — Current Capabilities
 Memory
 
-✅ Can create memory
-✅ Can load memory from a file
-✅ Can save memory permanently
+Can create memory
+Can load memory from a file
+Can save memory permanently
 
 Learning
 
-✅ Can accept new information
-✅ Can store information as relationships
+Can accept new information
+Can store information as relationships
 
-Example:
-
-dog → is_a → animal
+Example: dog → is_a → animal
 Awareness
 
-✅ Can check existing knowledge before learning
+Can check existing knowledge before learning
 
 Example:
 
-Human:
+Human: A dog is an animal.
 
-A dog is an animal.
+AI: I learned something new.
 
-AI:
+Human: A dog is an animal.
 
-I learned something new.
-
-Human:
-
-A dog is an animal.
-
-AI:
-
-I already know this.
+AI: I already know this.
