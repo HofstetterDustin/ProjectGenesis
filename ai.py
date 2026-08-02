@@ -45,7 +45,7 @@ class AI:
         )
 
         if not facts:
-            return "I don't know."
+            return "I don't know. (ai.py L48)"
 
         answers = []
 
@@ -84,10 +84,26 @@ class AI:
         fact = self.teacher.parse(sentence)
 
         if fact is None:
-            return "I don't understand."
+            return "I don't understand. (ai.py L87)"
 
         subject, relationship, obj = fact
-
+        
+        conflict = self.memory.find_conflict(
+            subject,
+            relationship,
+            obj
+        )
+        
+        if conflict:
+            
+            return (
+                "I found conflicting knowledge.(ai.py L100)\n"
+                f"Existing: {conflict['subject']} "
+                f"{conflict['relationship']} "
+                f"{conflict['object']}\n"
+                f"Source: {conflict['source']}"
+            )
+         
         self.memory.add_fact(
             subject,
             relationship,
@@ -97,4 +113,4 @@ class AI:
             fact_type="learned"
         )
 
-        return "I learned something new."
+        return "I learned something new. (ai.py L107-L116)"

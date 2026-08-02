@@ -32,7 +32,6 @@ class KnowledgeBase:
                 fact["subject"] == subject
                 and fact["relationship"] == relationship
                 and fact["object"] == object
-                and fact["source"] == source
             ):
                 return True
 
@@ -50,7 +49,7 @@ class KnowledgeBase:
     ):
 
         if self.contains_fact(subject, relationship, object):
-            print("I already know this.")
+            print("I already know this. (knowledge.py L53)")
             return
             
         fact = {
@@ -65,7 +64,7 @@ class KnowledgeBase:
         self.facts.append(fact)
         self.save()   
 
-        print("I learned something new.")
+        print("I added new fact. (knowledge.py L68)")
     
     """Find information about a subject."""
     def find_facts(self, subject):
@@ -77,3 +76,28 @@ class KnowledgeBase:
                 results.append(fact)
 
         return results
+    
+    """Contradiction Detection."""
+    def find_conflict(self, subject, relationship, obj):
+        
+        opposites = {
+            "is_a": "is_not_a",
+            "is_not_a": "is_a"
+        }
+        
+        opposite = opposites.get(relationship)
+        
+        if opposite is None:
+            return None
+            
+        for fact in self.facts:
+            
+            if(
+                fact["subject"] == subject
+                and fact["relationship"] == opposite
+                and fact["object"] == obj
+            ):
+                return fact
+                
+        return None
+        
