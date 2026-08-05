@@ -22,7 +22,7 @@ class Teacher:
             if words[3] == "a" or words[3] == "an":
                 object = " ".join(words[4:])
                 return subject, relationship, object
-                
+        
         """Pattern: subject is a or an"""
         if len(words) >= 4 and words[1] == "is":
             

@@ -1,0 +1,49 @@
+ARCHITECTURE DOCUMENT
+
+Vision:
+	Layer 1 - Language
+	Responsible for understanding English.
+		No reasoning.
+		Only language parsing.
+
+	Layer 2 - Knowledge
+	Responsible for simple facts.
+
+	Layer 3 - Narrative
+	Instead of storing only facts, Genesis stores events.
+		This layer preserves the story.
+
+	Layer 4 - Authority
+	Genesis doesn't just know who spoke.
+		It knows how to rank evidence.
+		This layer doesn't change the story.
+		It changes how Genesis evaluates the story.
+
+	Layer 5 - Reasoning
+	Only after all of the above should Genesis begin asking questions like:
+		• Is character 2 quoting character X accurately?
+		• Does this statement contradict an earlier statement?
+		• Is this an interpretation or a quotation?
+		• Can these two passages be reconciled?
+		• What conclusions follow from the available evidence?
+
+	Every inference, every answer, every conclusion should have a chain of evidence.
+
+Architecture:
+	Layer 1 - Language
+	Layer 2 - Knowledge
+	Layer 3 - Narrarive
+	Layer 4 - Authority
+	Layer 5 - Reasoning
+
+Version History:
+	Layer 2 PG26 v0.1.0 through v1.40
+
+Subsystems:
+
+Data Models:
+
+Future Features:
+	Layer 5 - Reasoning
+
+Design Decisions:

@@ -64,7 +64,7 @@ class KnowledgeBase:
         self.facts.append(fact)
         self.save()   
 
-        print("I added new fact. (knowledge.py L68)")
+        print("I added new fact. (knowledge.py L67)")
     
     """Find information about a subject."""
     def find_facts(self, subject):
@@ -82,7 +82,9 @@ class KnowledgeBase:
         
         opposites = {
             "is_a": "is_not_a",
-            "is_not_a": "is_a"
+            "is_not_a": "is_a",
+            "is": "is_not",
+            "is_not": "is"
         }
         
         opposite = opposites.get(relationship)

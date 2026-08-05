@@ -6,5 +6,21 @@
         "source": "Dustin",
         "confidence": 1.0,
         "type": "learned"
+    },
+    {
+        "subject": "animal",
+        "relationship": "is_a",
+        "object": "living thing",
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned"
+    },
+    {
+        "subject": "cat",
+        "relationship": "is_a",
+        "object": "animal",
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned"
     }
 ]

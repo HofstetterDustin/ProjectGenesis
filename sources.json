@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Dustin",
+        "type": "teacher",
+        "reliability": 0.9
+    },
+    {
+        "name": "Genesis",
+        "type": "inference",
+        "reliability": 0.8
+    }
+]
