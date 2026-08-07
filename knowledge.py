@@ -25,37 +25,44 @@ class KnowledgeBase:
             json.dump(self.facts, file, indent=4)
             
     """Check if a fact already exists."""
-    def contains_fact(self, subject, relationship, object, source="unknown"):
+    def contains_fact(
+        self, 
+        subject_id, 
+        relationship, 
+        object_id, 
+        source="unknown"
+        ):
     
         for fact in self.facts:
             if (
-                fact["subject"] == subject
+                fact["subject_id"] == subject_id
                 and fact["relationship"] == relationship
-                and fact["object"] == object
+                and fact["object_id"] == object_id
+                and fact["source"] == source
             ):
                 return True
 
         return False
 
-    """Add new knowledge."""        
+    """Add new knowledge. Related to self.memory.add_fact() in ai.py"""        
     def add_fact(
         self,
-        subject,
+        subject_id,
         relationship,
-        object,
+        object_id,
         source="Unknown",
         confidence=1.0,
         fact_type="learned"
     ):
 
-        if self.contains_fact(subject, relationship, object):
-            print("I already know this. (knowledge.py L53)")
+        if self.contains_fact(subject_id, relationship, object_id):
+            print("I already know this. | if self.contains_fact()")
             return
-            
+        """Dictionary"""    
         fact = {
-            "subject": subject,
+            "subject_id": subject_id,
             "relationship": relationship,
-            "object": object,
+            "object_id": object_id,
             "source": source,
             "confidence": confidence,
             "type": fact_type
@@ -64,21 +71,21 @@ class KnowledgeBase:
         self.facts.append(fact)
         self.save()   
 
-        print("I added new fact. (knowledge.py L67)")
+        print("I added new fact. | add_fact()")
     
-    """Find information about a subject."""
-    def find_facts(self, subject):
+    """Find information about a subject. This is the read functionality"""
+    def find_facts(self, subject_id):
         
         results = []
 
         for fact in self.facts:
-            if fact["subject"] == subject:
+            if fact["subject_id"] == subject_id:
                 results.append(fact)
 
         return results
     
     """Contradiction Detection."""
-    def find_conflict(self, subject, relationship, obj):
+    def find_conflict(self, subject_id, relationship, object_id):
         
         opposites = {
             "is_a": "is_not_a",
@@ -95,11 +102,18 @@ class KnowledgeBase:
         for fact in self.facts:
             
             if(
-                fact["subject"] == subject
+                fact["subject_id"] == subject_id
                 and fact["relationship"] == opposite
-                and fact["object"] == obj
+                and fact["object_id"] == object_id
             ):
                 return fact
                 
         return None
+        
+        
+        
+        
+        
+        
+        
         

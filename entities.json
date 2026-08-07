@@ -1,6 +1,26 @@
 [
-    "dog",
-    "animal",
-    "living thing",
-    "cat"
+    {
+        "id": 1,
+        "name": "dog",
+        "entity_class": "unknown",
+        "aliases": [],
+        "attributes": {},
+        "metadata": {}
+    },
+    {
+        "id": 2,
+        "name": "animal",
+        "entity_class": "unknown",
+        "aliases": [],
+        "attributes": {},
+        "metadata": {}
+    },
+    {
+        "id": 3,
+        "name": "cat",
+        "entity_class": "unknown",
+        "aliases": [],
+        "attributes": {},
+        "metadata": {}
+    }
 ]

@@ -39,13 +39,66 @@ class EntityManager:
 
         name = name.lower()
 
-        if name in self.entities:
+        if self.has_entity(name):
             return
 
-        self.entities.append(name)
+        entity = {
+            "id": len(self.entities) + 1,
+            "name": name,
+            "entity_class": "unknown",
+            "aliases": [],
+            "attributes": {},
+            "metadata": {}
+        }
+        self.entities.append(entity)    
 
         self.save()
 
-def has_entity(self, name):
+    def has_entity(self, name):
 
-    return name.lower() in self.entities
+        name = name.lower()
+        
+        for entity in self.entities:
+            
+            if entity["name"] == name:
+                return True
+                
+        return False
+
+    def get_entity(self, name):
+
+        name = name.lower()
+
+        for entity in self.entities:
+
+            if entity["name"] == name:
+                return entity
+
+        return None
+    
+    def get_entity_id(self, name):
+
+        entity = self.get_entity(name)
+
+        if entity:
+            return entity["id"]
+
+        return None
+        
+    def get_entity_name(self,entity_id):
+        
+        for entity in self.entities:
+            
+            if entity["id"] == entity_id:
+                return entity["name"]
+                
+        return None        
+    
+    
+    
+    
+    
+    
+    
+    
+    

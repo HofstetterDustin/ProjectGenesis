@@ -1,7 +1,10 @@
 class Reasoner:
 
+    def __init__(self, entities):
+        self.entities = entities
+    
     def infer(self, facts):
-
+        
         conclusions = []
 
         for fact in facts:
@@ -10,8 +13,8 @@ class Reasoner:
                 continue
 
             self.follow_chain(
-                fact["subject"],
-                fact["object"],
+                fact["subject_id"],
+                fact["object_id"],
                 facts,
                 conclusions,
                 set()
@@ -22,8 +25,8 @@ class Reasoner:
 
     def follow_chain(
         self,
-        subject,
-        current,
+        subject_id,
+        current_id,
         facts,
         conclusions,
         visited
@@ -32,19 +35,19 @@ class Reasoner:
         if current in visited:
             return
 
-        visited.add(current)
+        visited.add(current_id)
 
         for fact in facts:
 
             if fact["relationship"] != "is_a":
                 continue
 
-            if fact["subject"] == current:
+            if fact["subject_id"] == current_id:
 
                 conclusion = {
-                    "subject": subject,
+                    "subject_id": subject_id,
                     "relationship": "is_a",
-                    "object": fact["object"],
+                    "object_id": fact["object_id"],
                     "source": "Genesis",
                     "confidence": 0.9,
                     "type": "inference"
@@ -54,9 +57,16 @@ class Reasoner:
                     conclusions.append(conclusion)
 
                 self.follow_chain(
-                    subject,
-                    fact["object"],
+                    subject_id,
+                    fact["object_id"],
                     facts,
                     conclusions,
                     visited.copy()
                 )
+                
+                
+                
+                
+                
+                
+                

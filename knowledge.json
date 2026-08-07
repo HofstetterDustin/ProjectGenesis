@@ -1,24 +1,16 @@
 [
     {
-        "subject": "dog",
+        "subject_id": 1,
         "relationship": "is_a",
-        "object": "animal",
+        "object_id": 2,
         "source": "Dustin",
         "confidence": 1.0,
         "type": "learned"
     },
     {
-        "subject": "animal",
+        "subject_id": 3,
         "relationship": "is_a",
-        "object": "living thing",
-        "source": "Dustin",
-        "confidence": 1.0,
-        "type": "learned"
-    },
-    {
-        "subject": "cat",
-        "relationship": "is_a",
-        "object": "animal",
+        "object_id": 2,
         "source": "Dustin",
         "confidence": 1.0,
         "type": "learned"
