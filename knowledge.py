@@ -55,9 +55,9 @@ class KnowledgeBase:
         fact_type="learned"
     ):
 
-        if self.contains_fact(subject_id, relationship, object_id):
+        if self.contains_fact(subject_id, relationship, object_id, source):
             print("I already know this. | if self.contains_fact()")
-            return
+            return False
         """Dictionary"""    
         fact = {
             "subject_id": subject_id,
@@ -72,6 +72,8 @@ class KnowledgeBase:
         self.save()   
 
         print("I added new fact. | add_fact()")
+        
+        return True
     
     """Find information about a subject. This is the read functionality"""
     def find_facts(self, subject_id):

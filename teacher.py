@@ -8,47 +8,107 @@ class Teacher:
             sentence = sentence[:-1]
 
         words = sentence.split()
-
-        """Remove a or an at the beginning"""
-        if words[0] == "a" or words[0] == "an":
-            words = words[1:]
-            
-        """Pattern: subject is not a or an"""
-        if len(words) >= 5 and words[1] == "is" and words[2] == "not":
-
-            subject = words[0]
-            relationship = "is_not_a"
-
-            if words[3] == "a" or words[3] == "an":
-                object = " ".join(words[4:])
-                return subject, relationship, object
         
-        """Pattern: subject is a or an"""
-        if len(words) >= 4 and words[1] == "is":
+        if not words:
+            return None
             
-            subject = words[0]
-            relationship = "is_a"
+        # Pattern: subject | relationship = IS/IS_NOT | object
+        if "is" in words:
+            is_index = words.index("is")
             
-            if words[2] == "a" or words[2] == "an":
-                object = " ".join(words[3:])
-                return subject, relationship, object
+            #Pattern: subject IS_NOT a/an something
+            if (
+                is_index + 2 < len(words)
+                and words[is_index +1] == "not"
+                and is_index +3 < len(words)
+                and words[is_index + 2] in ("a", "an")
+            ):
+                subject = " ".join(words[is_index])
+                relationship = "is_not_a"
+                object = " ".join(words[is_index +3:])
                 
-        """Pattern: subject has"""
-        if len(words) >= 3 and words[1] == "has":
+                if subject and object:
+                    return subject, relationship, object
             
-            subject = words[0]
-            relationship = "has"
-            object = " ".join(words[2:])
+            #Pattern: subject IS a/an something
+            if (
+                is_index +1 < len(words)
+                and is_index +1 < len(words)
+                and words[is_index +1] in ("a", "an")
+                and is_index +2 < len(words)
+            ):
+                subject = " ".join(words[:is_index])
+                relationship = "is_a"
+                object = " ".join(words[is_index +2:])
+                
+                if subject and object:
+                    return subject, relationship, object
+                    
+        #Pattern: subject | relationship = HAS/HAS_NOT | object
+        if "has" in words:
+            has_index = words.index("has")
+            
+            subject = " ".join(words[:has_index])
+            
+            #Pattern: subject HAS NOT a/an something
+            if (
+                has_index +1 < len(words)
+                and words[has_index +1] == "not"
+            ):    
+                relationship = "has_not"
+                object = " ".join(words[has_index +2:])
+            else:
+                relationship = "has"
+                object = " ".join(words[has_index + 1:])
+                
+            if subject and object:
+                return subject, relationship, object
+                    
+                
+            # Pattern: subject HAS something
+            if "has" in words:
+                has_index = words.index("has")
+                
+                subject = " ".join(words[:has_index])
+                relationship = "has_a"
+                object = " ".join(words[has_index + 1:])
 
-            return subject, relationship, object
+                if subject and object:
+                    return subject, "has", object
+                    
+        #Pattern: subject | relationship = CAN/CAN_NOT | object
+        if "can" in words:
+            can_index = words.index("can")
             
-        """Pattern: subject can"""    
-        if len(words) >= 3 and words[1] == "can":
-            
-            subject = words[0]
-            relationship = "can"
-            object = " ".join(words[2:])
-            
-            return subject, relationship, object
+            subject = " ".join(words[:can_index])
 
-        return None
+            #Pattern: subject CAN_NOT do something
+            if (
+                can_index + 1 < len(words)
+                and words[can_index +1] == "not"
+            ):
+                relationship = "can_not"
+                object = " ".join(words[can_index + 2:])
+            else:
+                relationship = "can"
+                object = " ".join(words[can_index + 1:])
+                
+            if subject and object:
+                return subject, relationship, object
+            
+        #Pattern: subject IS a descriptive property
+        if "is" in words:
+            is_index = words.index("is")
+            
+            subject = " ".join(words[:is_index])
+            property_value = " ".join(words[is_index + 1:])
+            
+            if (
+                subject
+                and property_value
+                and Property_value not in ("a", "an")
+            ):
+                relationship = "has_property"
+                object = property_value
+                
+                return subject, relationship, object

@@ -8,11 +8,44 @@
         "type": "learned"
     },
     {
-        "subject_id": 3,
+        "subject_id": 1,
         "relationship": "is_a",
-        "object_id": 2,
+        "object_id": 3,
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned"
+    },
+    {
+        "subject_id": 1,
+        "relationship": "can_not",
+        "object_id": 4,
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned"
+    },
+    {
+        "subject_id": 1,
+        "relationship": "can",
+        "object_id": 5,
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned"
+    },
+    {
+        "subject_id": 1,
+        "relationship": "has_not",
+        "object_id": 6,
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned"
+    },
+    {
+        "subject_id": 1,
+        "relationship": "has",
+        "object_id": 7,
         "source": "Dustin",
         "confidence": 1.0,
         "type": "learned"
     }
+    
 ]

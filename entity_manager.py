@@ -37,13 +37,23 @@ class EntityManager:
 
     def add_entity(self, name):
 
-        name = name.lower()
+        name = name.lower().strip()
+        
+        #Remove a leading article.
+        if name.startswith("a "):
+            name = name[2:]
+            
+        elif name.startswith("an "):
+            name = name[3:]
 
         if self.has_entity(name):
             return
 
         entity = {
-            "id": len(self.entities) + 1,
+            "id": max(
+                [entity["id"] for entity in self.entities],
+                default=0
+            ) + 1,
             "name": name,
             "entity_class": "unknown",
             "aliases": [],
@@ -78,10 +88,27 @@ class EntityManager:
     
     def get_entity_id(self, name):
 
-        entity = self.get_entity(name)
-
-        if entity:
-            return entity["id"]
+        name = name.lower().strip()
+        
+        #Remove a leading article.
+        if name.startswith("a "):
+            name = name[2:]
+            
+        elif name.startswith("an "):
+            name = name[3:]
+            
+        for entity in self.entities:
+            
+            entity_name = entity["name"].lower().strip()
+            
+            if entity_name.startswith("a "):
+                entity_name = entity_name[2:]
+                
+            elif entity_name.startswith("an "):
+                entity_name = entity_name[3:]
+            
+            if entity["name"] == name:
+                return entity["id"]
 
         return None
         

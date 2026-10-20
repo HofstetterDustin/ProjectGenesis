@@ -32,7 +32,7 @@ class Reasoner:
         visited
     ):
 
-        if current in visited:
+        if current_id in visited:
             return
 
         visited.add(current_id)

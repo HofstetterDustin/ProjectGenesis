@@ -29,7 +29,13 @@ class AI:
                 .strip()
                 .lower()
             )
-
+            # Remove the article at the beginning.
+            if subject.startswith("a "):
+                subject = subject[2:]
+                
+            elif subject.startswith("an "):
+                subject = subject[3:]
+                
             return self.ask(subject)
 
         # Otherwise...
@@ -92,12 +98,18 @@ class AI:
             elif relationship == "has":
                 sentence = f"A {subject} has {object_name}."
                 
+            elif relationship == "has_not":
+                sentence = f"A {subject} has not {object_name}."
+                
             elif relationship == "can":
                 sentence = f"A {subject} can {object_name}."    
 
+            elif relationship == "can_not":
+                sentence = f"A {subject} cannot {object_name}."
+
             elif relationship == "is_not_a":
                 article = "an" if object_name[0].lower() in "aeiou" else "a"
-                sentence = f"A {subject_id} is not {article} {object_name}."
+                sentence = f"A {subject} is not {article} {object_name}."
 
             else:
                 sentence = f"{subject} {relationship} {object_name}."
@@ -156,7 +168,7 @@ class AI:
         """print(self.entities.get_entity_name(1))
         print(self.entities.get_entity_name(2))"""
         
-        self.memory.add_fact(
+        added = self.memory.add_fact(
             subject_id,
             relationship,
             object_id,
@@ -164,8 +176,11 @@ class AI:
             confidence=1.0,
             fact_type="learned"
         )
-
-        return "I learned something new. | teach.self.memory.add_fact() ai.py"
+        
+        if added:
+            return "I learned something new." 
+            
+        return "I already know this."
         
         
         
