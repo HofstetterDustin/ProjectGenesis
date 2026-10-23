@@ -106,7 +106,7 @@ class Teacher:
             if (
                 subject
                 and property_value
-                and Property_value not in ("a", "an")
+                and property_value not in ("a", "an")
             ):
                 relationship = "has_property"
                 object = property_value

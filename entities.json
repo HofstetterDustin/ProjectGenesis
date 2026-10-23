@@ -2,7 +2,7 @@
     {
         "id": 1,
         "name": "dog",
-        "entity_class": "unknown",
+        "entity_class": "category",
         "aliases": [],
         "attributes": {},
         "metadata": {}
@@ -10,7 +10,7 @@
     {
         "id": 2,
         "name": "animal",
-        "entity_class": "unknown",
+        "entity_class": "category",
         "aliases": [],
         "attributes": {},
         "metadata": {}
@@ -54,6 +54,45 @@
         "aliases": [],
         "attributes": {},
         "metadata": {}
+    },
+    {
+        "id": 8,
+        "name": "large",
+        "entity_class": "unknown",
+        "aliases": [],
+        "attributes": {},
+        "metadata": {}
+    },
+    {
+        "id": 9,
+        "name": "cat",
+        "entity_class": "category",
+        "aliases": [],
+        "attributes": {},
+        "metadata": {}
+    },
+    {
+        "id": 10,
+        "name": "friendly",
+        "entity_class": "unknown",
+        "aliases": [],
+        "attributes": {},
+        "metadata": {}
+    },
+    {
+        "id": 11,
+        "name": "curious",
+        "entity_class": "unknown",
+        "aliases": [],
+        "attributes": {},
+        "metadata": {}
+    },
+    {
+        "id": 12,
+        "name": "rex",
+        "entity_class": "individual",
+        "aliases": [],
+        "attributes": {},
+        "metadata": {}
     }
-    
 ]

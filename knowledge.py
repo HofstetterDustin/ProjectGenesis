@@ -14,10 +14,29 @@ class KnowledgeBase:
         try:
             with open(self.filename, "r") as file:
                 self.facts = json.load(file)
-
         except FileNotFoundError:
             self.facts = []
-
+        #Find the highest existing fact ID.
+        highest_id = 0
+        
+        for fact in self.facts:
+            fact_id = fact.get("fact_id", 0)
+            
+            if isinstance(fact_id, int) and fact_id > highest_id: 
+                highest_id = fact_id
+                
+        #Assign IDs to facts that do not have one.
+        for fact in self.facts:
+            if "fact_id" not in fact:
+                highest_id += 1
+                fact["fact_id"] = highest_id
+                
+        #Save the updated facts.
+        self.save()
+        
+        #Prepare the next ID for new facts.
+        self.next_fact_id = highest_id + 1
+            
     """Save knowledge to disk."""
     def save(self):
         
@@ -52,12 +71,27 @@ class KnowledgeBase:
         object_id,
         source="Unknown",
         confidence=1.0,
-        fact_type="learned"
+        fact_type="learned",
+        scope="unspecified"
     ):
 
         if self.contains_fact(subject_id, relationship, object_id, source):
-            print("I already know this. | if self.contains_fact()")
+            for fact in self.facts:
+                if (                
+                    fact["subject_id"] == subject_id
+                    and fact["relationship"] == relationship
+                    and fact["object_id"] == object_id
+                    and fact["source"] == source
+                ):
+                    if (
+                        fact.get("scope", "unspecified") == "unspecified"
+                        and scope != "unspecified"
+                    ):
+                        fact["scope"] = scope
+                        self.save()
+                        
             return False
+        
         """Dictionary"""    
         fact = {
             "subject_id": subject_id,
@@ -65,7 +99,8 @@ class KnowledgeBase:
             "object_id": object_id,
             "source": source,
             "confidence": confidence,
-            "type": fact_type
+            "type": fact_type,
+            "scope": scope
         }
 
         self.facts.append(fact)

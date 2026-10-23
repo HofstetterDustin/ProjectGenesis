@@ -77,11 +77,13 @@ class EntityManager:
 
     def get_entity(self, name):
 
-        name = name.lower()
+        name = name.lower().strip()
 
         for entity in self.entities:
+            
+            entity_name = entity["name"].lower().strip()
 
-            if entity["name"] == name:
+            if entity_name == name:
                 return entity
 
         return None
@@ -107,11 +109,32 @@ class EntityManager:
             elif entity_name.startswith("an "):
                 entity_name = entity_name[3:]
             
-            if entity["name"] == name:
+            if entity_name == name:
                 return entity["id"]
 
         return None
+     
+    def set_entity_class(self, name, entity_class):
         
+        entity_id = self.get_entity_id(name)
+        
+        if entity_id is None:
+            return False
+            
+        for entity in self.entities:
+            if entity["id"] == entity_id:
+                current_class = entity.get("entity_class", "unknown")
+                
+                #Do not overwrite an existing classification.
+                if current_class not in ("unknown", entity_class):
+                    return False
+                    
+                entity["entity_class"] = entity_class
+                self.save()
+                return True
+                
+        return False
+     
     def get_entity_name(self,entity_id):
         
         for entity in self.entities:

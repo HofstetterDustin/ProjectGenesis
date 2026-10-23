@@ -11,4 +11,4 @@ while True:
 
     answer = brain.process(user)
 
-    print("Genesis:", answer)
+    print("PG26:\n" + answer)

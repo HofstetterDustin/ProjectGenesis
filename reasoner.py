@@ -50,12 +50,20 @@ class Reasoner:
                     "object_id": fact["object_id"],
                     "source": "Genesis",
                     "confidence": 0.9,
-                    "type": "inference"
+                    "type": "inference",
+                    "scope": "category_membership"
                 }
 
-                if conclusion not in conclusions:
-                    conclusions.append(conclusion)
+                already_inferred = any(
+                    existing["subject_id"] == conclusion["subject_id"]
+                    and existing["relationship"] == conclusion["relationship"]
+                    and existing["object_id"] == conclusion["object_id"]
+                    for existing in conclusions
+                )
 
+                if not already_inferred:
+                    conclusions.append(conclusion)
+                    
                 self.follow_chain(
                     subject_id,
                     fact["object_id"],
@@ -63,10 +71,4 @@ class Reasoner:
                     conclusions,
                     visited.copy()
                 )
-                
-                
-                
-                
-                
-                
                 
