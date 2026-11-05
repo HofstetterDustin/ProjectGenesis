@@ -23,7 +23,7 @@ class Teacher:
                 and is_index +3 < len(words)
                 and words[is_index + 2] in ("a", "an")
             ):
-                subject = " ".join(words[is_index])
+                subject = " ".join(words[:is_index])
                 relationship = "is_not_a"
                 object = " ".join(words[is_index +3:])
                 

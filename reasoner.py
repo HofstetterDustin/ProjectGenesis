@@ -17,7 +17,8 @@ class Reasoner:
                 fact["object_id"],
                 facts,
                 conclusions,
-                set()
+                set(),
+                [fact["fact_id"]]
             )
 
         return conclusions
@@ -29,7 +30,8 @@ class Reasoner:
         current_id,
         facts,
         conclusions,
-        visited
+        visited,
+        because
     ):
 
         if current_id in visited:
@@ -43,7 +45,7 @@ class Reasoner:
                 continue
 
             if fact["subject_id"] == current_id:
-
+                #conclusion dictionary
                 conclusion = {
                     "subject_id": subject_id,
                     "relationship": "is_a",
@@ -51,7 +53,8 @@ class Reasoner:
                     "source": "Genesis",
                     "confidence": 0.9,
                     "type": "inference",
-                    "scope": "category_membership"
+                    "scope": "category_membership",
+                    "because": because + [fact["fact_id"]]
                 }
 
                 already_inferred = any(
@@ -69,6 +72,7 @@ class Reasoner:
                     fact["object_id"],
                     facts,
                     conclusions,
-                    visited.copy()
+                    visited.copy(),
+                    because + [fact["fact_id"]]
                 )
                 

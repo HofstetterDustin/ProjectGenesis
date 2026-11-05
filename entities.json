@@ -18,7 +18,7 @@
     {
         "id": 3,
         "name": "living creation",
-        "entity_class": "unknown",
+        "entity_class": "category",
         "aliases": [],
         "attributes": {},
         "metadata": {}
@@ -91,6 +91,46 @@
         "id": 12,
         "name": "rex",
         "entity_class": "individual",
+        "aliases": [],
+        "attributes": {},
+        "metadata": {}
+    },
+    {
+        "id": 13,
+        "name": "sparrow",
+        "entity_class": "category",
+        "aliases": [],
+        "attributes": {},
+        "metadata": {}
+    },
+    {
+        "id": 14,
+        "name": "bird",
+        "entity_class": "category",
+        "aliases": [],
+        "attributes": {},
+        "metadata": {}
+    },
+    {
+        "id": 16,
+        "name": "sparrow a living creation?",
+        "entity_class": "category",
+        "aliases": [],
+        "attributes": {},
+        "metadata": {}
+    },
+    {
+        "id": 17,
+        "name": "horse",
+        "entity_class": "category",
+        "aliases": [],
+        "attributes": {},
+        "metadata": {}
+    },
+    {
+        "id": 18,
+        "name": "fish",
+        "entity_class": "unknown",
         "aliases": [],
         "attributes": {},
         "metadata": {}

@@ -16,7 +16,8 @@
         "source": "Dustin",
         "confidence": 1.0,
         "type": "learned",
-        "fact_id": 2
+        "fact_id": 2,
+        "scope": "category_membership"
     },
     {
         "subject_id": 1,
@@ -25,7 +26,8 @@
         "source": "Dustin",
         "confidence": 1.0,
         "type": "learned",
-        "fact_id": 3
+        "fact_id": 3,
+        "scope": "category_capability"
     },
     {
         "subject_id": 1,
@@ -34,7 +36,8 @@
         "source": "Dustin",
         "confidence": 1.0,
         "type": "learned",
-        "fact_id": 4
+        "fact_id": 4,
+        "scope": "category_capability"
     },
     {
         "subject_id": 1,
@@ -43,7 +46,8 @@
         "source": "Dustin",
         "confidence": 1.0,
         "type": "learned",
-        "fact_id": 5
+        "fact_id": 5,
+        "scope": "unspecified"
     },
     {
         "subject_id": 1,
@@ -52,7 +56,8 @@
         "source": "Dustin",
         "confidence": 1.0,
         "type": "learned",
-        "fact_id": 6
+        "fact_id": 6,
+        "scope": "unspecified"
     },
     {
         "subject_id": 1,
@@ -71,7 +76,7 @@
         "source": "Dustin",
         "confidence": 1.0,
         "type": "learned",
-        "scope": "unspecified",
+        "scope": "category_possible",
         "fact_id": 8
     },
     {
@@ -113,5 +118,95 @@
         "type": "learned",
         "scope": "individual",
         "fact_id": 12
+    },
+    {
+        "subject_id": 13,
+        "relationship": "is_a",
+        "object_id": 14,
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned",
+        "scope": "category_membership",
+        "fact_id": 13
+    },
+    {
+        "subject_id": 14,
+        "relationship": "is_a",
+        "object_id": 2,
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned",
+        "scope": "category_membership",
+        "fact_id": 14
+    },
+    {
+        "subject_id": 2,
+        "relationship": "is_a",
+        "object_id": 3,
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned",
+        "scope": "category_membership",
+        "fact_id": 15
+    },
+    {
+        "subject_id": 12,
+        "relationship": "can",
+        "object_id": 5,
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned",
+        "scope": "individual_capability",
+        "fact_id": 16
+    },
+    {
+        "subject_id": 12,
+        "relationship": "can_not",
+        "object_id": 4,
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned",
+        "scope": "individual_capability",
+        "fact_id": 17
+    },
+    {
+        "subject_id": 17,
+        "relationship": "is_a",
+        "object_id": 2,
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned",
+        "scope": "category_membership",
+        "fact_id": 18
+    },
+    {
+        "subject_id": 12,
+        "relationship": "is_not_a",
+        "object_id": 9,
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned",
+        "scope": "unspecified",
+        "fact_id": 19
+    },
+    {
+        "subject_id": 12,
+        "relationship": "is_not_a",
+        "object_id": 17,
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned",
+        "scope": "unspecified",
+        "fact_id": 20
+    },
+    {
+        "subject_id": 12,
+        "relationship": "is_not_a",
+        "object_id": 18,
+        "source": "Dustin",
+        "confidence": 1.0,
+        "type": "learned",
+        "scope": "unspecified",
+        "fact_id": 21
     }
 ]

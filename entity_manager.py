@@ -4,10 +4,8 @@ import json
 class EntityManager:
 
     def __init__(self):
-
         self.filename = "entities.json"
         self.entities = []
-
         self.load()
 
 
