@@ -258,7 +258,12 @@ class AI:
             return "I cannot explain that claim yet."
             
         subject = words[0]
-        object_name = " ".join(words[1:])
+        if len(words) >= 3 and words[1] == "not":
+            relationship = "is_not_a"
+            object_name = " ".join(words[2:])
+        else:
+            relationship = "is_a"
+            object_name = " ".join(words[1:])
         
         subject_id = self.entities.get_entity_id(subject)
         object_id = self.entities.get_entity_id(object_name)
@@ -272,16 +277,27 @@ class AI:
         for fact in all_facts:
             if (
                 fact["subject_id"] == subject_id
-                and fact["relationship"] == "is_a"
+                and fact["relationship"] == relationship
                 and fact["object_id"] == object_id
             ):
                 fact_subject = self.entities.get_entity_name(fact["subject_id"])
                 fact_object = self.entities.get_entity_name(fact["object_id"])
                 
+                if relationship == "is_not_a":
+                    sentence = (
+                        f"{fact_subject.capitalize()} is not "
+                        f"{'an' if fact_object[0].lower() in 'aeiou' else 'a'} "
+                        f"{fact_object}."
+                    )
+                else:
+                    sentence = (
+                        f"{fact_subject.capitalize()} is "
+                        f"{'an' if fact_object[0].lower() in 'aeiou' else 'a'} "
+                        f"{fact_object}."
+                    )
+                    
                 return (
-                    f"{fact_subject.capitalize()} is "
-                    f"{'an' if fact_object[0].lower() in 'aeiou' else 'a'} "
-                    f"{fact_object}.\n\n"
+                    f"{sentence}\n\n"
                     f"Fact ID: {fact['fact_id']}\n"
                     f"Source: {fact.get('source', 'Unknown')}\n"
                     f"This is directly stored knowledge."
@@ -302,8 +318,11 @@ class AI:
                 break
                 
         if conclusion is None:
-            return "I cannot find an inferred conclusion supporting that claim."
-        
+            return (
+                f"PG26 cannot establish that {subject} is {object_name}.\n\n"
+                "Knowledge Type: unverified\n"
+                "Status: No supporting knowledge or inference was found."
+            )
         # Retrieve the original facts supporting the conclusion.   
         supporting_ids = conclusion.get("because", [])
         supporting_facts = []
@@ -337,14 +356,22 @@ class AI:
                 
             explanation.append(
                 f"{sentence} (Fact ID: {fact['fact_id']}, Source: {fact.get('source', 'Unknown')})"
-            )
-            
+            )    
         explanation.append(
             f"Therefore, PG26 infers that {subject} is {object_name}."
         )
+        # Identify the nature and origin of the conclusion.
+        confidence = conclusion.get("confidence", 0)
         
+        explanation.append(
+            f"Knowledge Type: {conclusion.get('type', 'Unknown')}\n"
+            f"Source: {conclusion.get('source', 'Unknown')}\n"
+            f"Confidence: {confidence * 100:.0f}%\n"
+            "This conclusion was derived by PG26, "
+            "not directly taught as a fact."
+        )
         return "\n\n".join(explanation)
-                    
+            
     def teach(self, sentence):
 
         fact = self.teacher.parse(sentence)
