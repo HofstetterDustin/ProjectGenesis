@@ -184,7 +184,11 @@ class KnowledgeBase:
             "is_a": "is_not_a",
             "is_not_a": "is_a",
             "is": "is_not",
-            "is_not": "is"
+            "is_not": "is",
+            "can": "can_not",
+            "can_not": "can",
+            "has": "has_not",
+            "has_not": "has"
         }
         opposite = opposites.get(relationship)
         if opposite is None:

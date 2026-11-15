@@ -17,7 +17,7 @@ class AI:
         self.memory.update_fact_scopes(self.entities.entities)
         self.teacher = Teacher()
         
-    def process(self, sentence):
+    def process(self, sentence, mode="discussion"):
 
         sentence = sentence.strip()
         question = sentence.lower()
@@ -87,8 +87,11 @@ class AI:
                 "I did not save it as knowledge."
             )
 
-        # Otherwise, treat the input as something to learn.
-        return self.teach(sentence)
+        # Otherwise, treat the input according to the current mode.
+        if mode == "teaching":
+            return self.teach(sentence)
+            
+        return self.discuss(sentence)
 
     #Yes/No/I don't know ability to answer questions.
     def answer_yes_no(self, subject, relationship, object_name):
@@ -255,7 +258,12 @@ class AI:
             return "I cannot explain that claim yet."
             
         subject = words[0]
-        object_name = " ".join(words[1:])
+        if len(words) >= 3 and words[1] == "not":
+            relationship = "is_not_a"
+            object_name = " ".join(words[2:])
+        else:
+            relationship = "is_a"
+            object_name = " ".join(words[1:])
         
         subject_id = self.entities.get_entity_id(subject)
         object_id = self.entities.get_entity_id(object_name)
@@ -263,12 +271,43 @@ class AI:
         if subject_id is None or object_id is None:
             return "I don't know enough to explain that claim."
         
-        #Find the inferred conclusion.
+        #Find directly stored knowledge first.
         all_facts = self.memory.facts
+        
+        for fact in all_facts:
+            if (
+                fact["subject_id"] == subject_id
+                and fact["relationship"] == relationship
+                and fact["object_id"] == object_id
+            ):
+                fact_subject = self.entities.get_entity_name(fact["subject_id"])
+                fact_object = self.entities.get_entity_name(fact["object_id"])
+                
+                if relationship == "is_not_a":
+                    sentence = (
+                        f"{fact_subject.capitalize()} is not "
+                        f"{'an' if fact_object[0].lower() in 'aeiou' else 'a'} "
+                        f"{fact_object}."
+                    )
+                else:
+                    sentence = (
+                        f"{fact_subject.capitalize()} is "
+                        f"{'an' if fact_object[0].lower() in 'aeiou' else 'a'} "
+                        f"{fact_object}."
+                    )
+                    
+                return (
+                    f"{sentence}\n\n"
+                    f"Fact ID: {fact['fact_id']}\n"
+                    f"Source: {fact.get('source', 'Unknown')}\n"
+                    f"This is directly stored knowledge."
+                )
+                
+        # If no direct fact exists, look for an inferred conclusion.
         inferred = self.reasoner.infer(all_facts)
         
         conclusion = None
-        
+                
         for fact in inferred:
             if (
                 fact["subject_id"] == subject_id
@@ -279,9 +318,12 @@ class AI:
                 break
                 
         if conclusion is None:
-            return "I cannot find an inferred conclusion supporting that claim."
-            
-        # Retrieve the original facts supporting the conclusion.
+            return (
+                f"PG26 cannot establish that {subject} is {object_name}.\n\n"
+                "Knowledge Type: unverified\n"
+                "Status: No supporting knowledge or inference was found."
+            )
+        # Retrieve the original facts supporting the conclusion.   
         supporting_ids = conclusion.get("because", [])
         supporting_facts = []
         
@@ -314,14 +356,22 @@ class AI:
                 
             explanation.append(
                 f"{sentence} (Fact ID: {fact['fact_id']}, Source: {fact.get('source', 'Unknown')})"
-            )
-            
+            )    
         explanation.append(
             f"Therefore, PG26 infers that {subject} is {object_name}."
         )
+        # Identify the nature and origin of the conclusion.
+        confidence = conclusion.get("confidence", 0)
         
+        explanation.append(
+            f"Knowledge Type: {conclusion.get('type', 'Unknown')}\n"
+            f"Source: {conclusion.get('source', 'Unknown')}\n"
+            f"Confidence: {confidence * 100:.0f}%\n"
+            "This conclusion was derived by PG26, "
+            "not directly taught as a fact."
+        )
         return "\n\n".join(explanation)
-                    
+            
     def teach(self, sentence):
 
         fact = self.teacher.parse(sentence)
@@ -421,7 +471,55 @@ class AI:
             return "I learned something new." 
             
         return "I already know this."
+      
+    def discuss(self, sentence):
+        # Interpret the statement.
+        fact = self.teacher.parse(sentence)
+        if fact is None:
+            return "I don't understand that statement yet."
+        subject, relationship, object = fact
         
+        # Find the entities.
+        subject_id = self.entities.get_entity_id(subject)
+        object_id = self.entities.get_entity_id(object)
+        
+        # PG26 cannot evale unknown entities yet.
+        if subject_id is None or object_id is None:
+            return "I don't have enugh knowledge to evaluate that statement."
+            
+        #Check whether the statement agrees with existing knowledge.
+        if self.memory.check_fact(
+            subject_id,
+            relationship,
+            object_id
+        ):
+            return (
+                "I agree with that statement.\n"
+                "It is consistent with my existing knowledge.\n"
+                "Source: Existing knowledge."
+            )
+        #Look for an existing contradictory fact
+        conflict = self.memory.find_conflict(
+            subject_id,
+            relationship,
+            object_id
+        )
+        if conflict:
+            existing_subject = self.entities.get_entity_name(
+                conflict["subject_id"]
+            )
+            existing_object = self.entities.get_entity_name(
+                conflict["object_id"]
+            )
+            return (
+                "I disagree with that statement.\n"
+                f"My knowledge indicates: {existing_subject} "
+                f"{conflict['relationship']} "
+                f"{existing_object}.\n"
+                f"Source: {conflict['source']}"
+            )
+        return "I don't currently have enough knowledge to evaluate that statement."
+                
         
         
         
