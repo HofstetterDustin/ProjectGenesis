@@ -174,66 +174,14 @@ class AI:
                 reliability = source_info["reliability"]
             else:
                 reliability = 0.0
+            
             evidence = self.evidence.calculate(
                 confidence,
                 reliability
             )
             
-            if relationship == "is_a":
-                article = "an" if object_name[0].lower() in "aeiou" else "a"
-                entity = self.entities.get_entity(subject)
-                if entity and entity.get("entity_class") == "individual":
-                    sentence = f"{subject.capitalize()} is {article} {object_name}."
-                else:
-                    sentence = f"A {subject} is {article} {object_name}."
-                
-            elif relationship == "has":
-                entity == self.entities.get_entity(subject)
-                if entity and entity.get("entity_class") == "individual":
-                    sentence = f"{subject.capitalize()} has {object_name}."
-                else:
-                    sentence = f"A {subject} has {object_name}."
+            sentence = self.format_fact(fact)
             
-            elif relationship == "has_property":
-                entity = self.entities.get_entity(subject)
-                if entity and entity.get("entity_class") == "individual":
-                    sentence = f"{subject.capitalize()} is {object_name}."
-                elif scope == "category_possible":
-                    sentence = f"A {subject} may be {object_name}."
-                else:
-                    sentence = f"A {subject} is {object_name}."
-                
-            elif relationship == "has_not":
-                entity = self.entities.get_entity(subject)
-                if entity and entity.get("entity_class") == "individual":
-                    sentence = f"{subject.capitalize()} has not {object_name}."
-                else:
-                    sentence = f"A {subject} has not {object_name}."
-                
-            elif relationship == "can":
-                entity = self.entities.get_entity(subject)
-                if entity and entity.get("entity_class") == "individual":
-                    sentence = f"{subject.capitalize()} can {object_name}."
-                else:
-                    sentence = f"A {subject} can {object_name}."    
-                
-            elif relationship == "can_not":
-                entity = self.entities.get_entity(subject)
-                if entity and entity.get("entity_class") == "individual":
-                    sentence = f"{subject.capitalize()} cannot {object_name}."
-                else:
-                    sentence = f"A {subject} cannot {object_name}."
-
-            elif relationship == "is_not_a":
-                article = "an" if object_name[0].lower() in "aeiou" else "a"
-                entity = self.entities.get_entity(subject)
-                if entity and entity.get("entity_class") == "individual":
-                    sentence = f"{subject.capitalize()} is not {article} {object_name}."
-                else:
-                    sentence = f"A {subject} is not {article} {object_name}."
-            else:
-                sentence = f"{subject} {relationship} {object_name}."
-
             answers.append(
                 f"{sentence} "
                 f"(Source: {source}, "
@@ -242,8 +190,60 @@ class AI:
                 f"Evidence: {evidence*100:.0f}%, "
                 f"Scope: {scope})"
             )
-
         return "\n\n".join(answers)
+
+    def format_fact(self, fact):
+        subject_id = fact["subject_id"]
+        relationship = fact["relationship"]
+        object_id = fact["object_id"]
+        
+        subject = self.entities.get_entity_name(subject_id)
+        object_name = self.entities.get_entity_name(object_id)
+        
+        scope = fact.get("scope", "unspecified")
+        entity = self.entities.get_entity(subject)
+        
+        if relationship == "is_a":
+            article = "an" if object_name[0].lower() in "aeiou" else "a"
+            if entity and entity.get("entity_class") == "individual":
+                return f"{subject.capitalize()} is {article} {object_name}."
+            else:
+                return f"A {subject} is {article} {object_name}."
+        elif relationship == "is_not_a":
+            article = "an" if object_name[0].lower() in "aeiou" else "a"
+            if entity and entity.get("entity_class") == "individual":
+                return f"{subject.capitalize()} is not {article} {object_name}."
+            else:
+                return f"A {subject} is not {article} {object_name}."
+        elif relationship == "has":
+            if entity and entity.get("entity_class") == "individual":
+                return f"{subject.capitalize()} has {object_name}."
+            else:
+                return f"A {subject} has {object_name}."
+        elif relationship == "has_property":
+            if entity and entity.get("entity_class") == "individual":
+                return f"{subject.capitalize()} is {object_name}."
+            elif scope == "category_possible":
+                return f"A {subject} may be {object_name}."
+            else:
+                return f"A {subject} is {object_name}."
+        elif relationship == "has_not":
+            if entity and entity.get("entity_class") == "individual":
+                return f"{subject.capitalize()} has not {object_name}."
+            else:
+                return f"A {subject} has not {object_name}."
+        elif relationship == "can":
+            if entity and entity.get("entity_class") == "individual":
+                return f"{subject.capitalize()} can {object_name}."
+            else:
+                return f"A {subject} can {object_name}."
+        elif relationship == "can_not":
+            if entity and entity.get("entity_class") == "individual":
+                return f"{subject.capitalize()} cannot {object_name}."
+            else:
+                return f"A {subject} cannot {object_name}."
+        else:
+            return f"{subject} {relationship} {object_name}."
         
     def explain(self, claim):
         
@@ -283,19 +283,8 @@ class AI:
                 fact_subject = self.entities.get_entity_name(fact["subject_id"])
                 fact_object = self.entities.get_entity_name(fact["object_id"])
                 
-                if relationship == "is_not_a":
-                    sentence = (
-                        f"{fact_subject.capitalize()} is not "
-                        f"{'an' if fact_object[0].lower() in 'aeiou' else 'a'} "
-                        f"{fact_object}."
-                    )
-                else:
-                    sentence = (
-                        f"{fact_subject.capitalize()} is "
-                        f"{'an' if fact_object[0].lower() in 'aeiou' else 'a'} "
-                        f"{fact_object}."
-                    )
-                    
+                sentence = self.format_fact(fact)
+                
                 return (
                     f"{sentence}\n\n"
                     f"Fact ID: {fact['fact_id']}\n"
@@ -340,19 +329,7 @@ class AI:
         explanation = []
         
         for fact in supporting_facts:
-            fact_subject = self.entities.get_entity_name(fact["subject_id"])
-            fact_object = self.entities.get_entity_name(fact["object_id"])
-            
-            if fact["relationship"] == "is_a":
-                article = "an" if fact_object[0].lower() in "aeiou" else "a"
-                
-                if self.entities.get_entity(fact_subject).get("entity_class") == "individual":
-                    sentence = f"{fact_subject.capitalize()} is {article} {fact_object}."
-                else:
-                    subject_article = "an" if fact_subject[0].lower() in "aeiou" else "a"
-                    sentence = f"{subject_article.capitalize()} {fact_subject} is {article} {fact_object}."
-            else:
-                sentence = f"{fact_subject} {fact['relationship']} {fact_object}."
+            sentence = self.format_fact(fact)
                 
             explanation.append(
                 f"{sentence} (Fact ID: {fact['fact_id']}, Source: {fact.get('source', 'Unknown')})"
